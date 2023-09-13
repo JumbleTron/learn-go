@@ -68,6 +68,43 @@ func calc(a, b int) (sum int, diff int) {
 	return
 }
 
+func someFunc(a, b int, f func(int, int) int) int {
+	return f(a, b)
+}
+
+func generateNextNumber() func() int {
+	num := 0
+	increess := func() int {
+		num++
+		return num
+	}
+
+	return increess
+}
+
+type Person struct {
+	firstName string
+	age       int
+}
+
+// Przekazywanie typu wartości
+func changeFirstName(currentPerson Person, firstName string) {
+	currentPerson.firstName = firstName
+}
+
+// Przekazywanie wskaźnika do typu wartości
+func changeAge(currentPerson *Person, age int) {
+	currentPerson.age = age
+}
+func sumNumbersNoPF(numbers []int) int {
+	sum := 0
+	for i := 0; i < len(numbers); i++ {
+		sum += numbers[i]
+		numbers[i] += 10
+	}
+	return sum
+}
+
 func main() {
 	fmt.Println("Suma: ", addNUmber(2, 3))
 	fileName := "przykladowy.txt"
@@ -106,4 +143,36 @@ func main() {
 	sum2, diff2 := calc(10, 5)
 	fmt.Printf("Suma: %d\n", sum2)
 	fmt.Printf("Różnica: %d\n", diff2)
+
+	addanonymousFunc := func(a, b int) int {
+		return a + b
+	}
+
+	sumOfNumbers := addanonymousFunc(3, 5)
+	fmt.Printf("Suma: %d\n", sumOfNumbers)
+
+	resultWith := someFunc(10, 4, func(x, y int) int {
+		return x * y
+	})
+
+	fmt.Printf("Wynik operacji: %d\n", resultWith)
+
+	numberGenerator := generateNextNumber()
+
+	fmt.Println(numberGenerator())
+	fmt.Println(numberGenerator())
+	fmt.Println(numberGenerator())
+
+	person := Person{firstName: "Anna", age: 30}
+
+	changeFirstName(person, "Alice")
+	fmt.Println("Imie po zmianie imienia:", person.firstName) // Nadal "Anna", bo osoba jest niezmienne
+
+	changeAge(&person, 35)
+	fmt.Println("Wiek po zmianie wieku:", person.age) // Teraz 35, ponieważ zmieniliśmy oryginalną osobę
+
+	var numbersSlcie []int = []int{5, 10}
+	fmt.Println(sumNumbersNoPF(numbersSlcie))
+	fmt.Println("Wartość zmiennej numbersSlcie: ", numbersSlcie)
+
 }
